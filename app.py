@@ -168,13 +168,12 @@ def report_status():
     pixel_status = []
     for i in range(NUM_PIXELS):
         pixel_status.append(dict(Pixel=i, Status=dict(zip(["Red","Green","Blue","Brightness"],get_pixel(i)))))
-    pixel_status = json.dumps(pixel_status)
     data = {
         "status": 200,
         "message": pixel_status
     }
-    
-    return jsonify(data)
+
+    return jsonify(data) # This ruins the order of keys for humans. JSON doesn't care, and neither do we.
 
 
 if __name__ == '__main__':
