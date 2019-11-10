@@ -4,6 +4,7 @@ from http.client import HTTPException
 
 from flask import Flask, jsonify, request
 from blinkt import set_brightness, set_pixel, show, clear, get_pixel, NUM_PIXELS
+import json
 
 app = Flask(__name__)
 
@@ -160,6 +161,19 @@ def turn_custom():
         "message": "Custom pattern applied"
     }
 
+    return jsonify(data)
+
+@app.route('/status', methods=['GET'])
+def report_status():
+    pixel_status = []
+    for i in range(NUM_PIXELS):
+        pixel_status.append(dict(Pixel=i, Status=dict(zip(["Red","Green","Blue","Brightness"],get_pixel(i)))))
+    pixel_status = json.dumps(pixel_status)
+    data = {
+        "status": 200,
+        "message": pixel_status
+    }
+    
     return jsonify(data)
 
 
