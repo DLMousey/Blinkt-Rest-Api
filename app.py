@@ -3,7 +3,7 @@ import time
 from http.client import HTTPException
 
 from flask import Flask, jsonify, request
-from blinkt import set_brightness, set_pixel, show, clear
+from blinkt import set_brightness, set_pixel, show, clear, get_pixel, NUM_PIXELS
 
 app = Flask(__name__)
 
@@ -74,7 +74,7 @@ def handle_error(e):
 def set_red():
     set_brightness(0.5)
 
-    for x in range(8):
+    for x in range(NUM_PIXELS):
         set_pixel(x, 255, 0, 0)
         show()
 
@@ -89,7 +89,7 @@ def set_red():
 def set_green():
     set_brightness(0.5)
 
-    for x in range(8):
+    for x in range(NUM_PIXELS):
         set_pixel(x, 0, 255, 0)
         show()
 
@@ -104,7 +104,7 @@ def set_green():
 def set_blue():
     set_brightness(0.5)
 
-    for x in range(8):
+    for x in range(NUM_PIXELS):
         set_pixel(x, 0, 0, 255)
         show()
 
@@ -119,7 +119,7 @@ def set_blue():
 def turn_off():
     set_brightness(0)
 
-    for x in range(8):
+    for x in range(NUM_PIXELS):
         set_pixel(x, 0, 0, 0)
         show()
 
