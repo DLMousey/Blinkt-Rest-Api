@@ -3,7 +3,8 @@ import time
 from http.client import HTTPException
 
 from flask import Flask, jsonify, request
-from blinkt import set_brightness, set_pixel, show, clear
+from blinkt import set_brightness, set_pixel, show, clear, get_pixel, NUM_PIXELS
+import json
 
 app = Flask(__name__)
 
@@ -74,7 +75,7 @@ def handle_error(e):
 def set_red():
     set_brightness(0.5)
 
-    for x in range(8):
+    for x in range(NUM_PIXELS):
         set_pixel(x, 255, 0, 0)
         show()
 
@@ -89,7 +90,7 @@ def set_red():
 def set_green():
     set_brightness(0.5)
 
-    for x in range(8):
+    for x in range(NUM_PIXELS):
         set_pixel(x, 0, 255, 0)
         show()
 
@@ -104,7 +105,7 @@ def set_green():
 def set_blue():
     set_brightness(0.5)
 
-    for x in range(8):
+    for x in range(NUM_PIXELS):
         set_pixel(x, 0, 0, 255)
         show()
 
@@ -119,7 +120,7 @@ def set_blue():
 def turn_off():
     set_brightness(0)
 
-    for x in range(8):
+    for x in range(NUM_PIXELS):
         set_pixel(x, 0, 0, 0)
         show()
 
@@ -161,6 +162,18 @@ def turn_custom():
     }
 
     return jsonify(data)
+
+@app.route('/status', methods=['GET'])
+def report_status():
+    pixel_status = []
+    for i in range(NUM_PIXELS):
+        pixel_status.append(dict(Pixel=i, Status=dict(zip(["Red","Green","Blue","Brightness"],get_pixel(i)))))
+    data = {
+        "status": 200,
+        "message": pixel_status
+    }
+
+    return jsonify(data) # This ruins the order of keys for humans. JSON doesn't care, and neither do we.
 
 
 if __name__ == '__main__':
